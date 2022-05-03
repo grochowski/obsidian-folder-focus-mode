@@ -1,0 +1,27 @@
+{
+	"name": "obsidian-folder-focus-mode",
+	"version": "0.9.0",
+	"description": "Focus file explorer on chosen folder and its files and subdirectories, while hiding all the other elements.",
+	"main": "main.js",
+	"scripts": {
+		"dev": "node esbuild.config.mjs",
+		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+		"version": "node version-bump.mjs && git add manifest.json versions.json"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^16.11.6",
+		"@typescript-eslint/eslint-plugin": "^5.2.0",
+		"@typescript-eslint/parser": "^5.2.0",
+		"builtin-modules": "^3.2.0",
+		"esbuild": "0.13.12",
+		"obsidian": "latest",
+		"tslib": "2.3.1",
+		"typescript": "4.4.4"
+	},
+	"dependencies": {
+		"path": "^0.12.7"
+	}
+}
