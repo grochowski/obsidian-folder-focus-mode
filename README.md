@@ -2,7 +2,7 @@
 
 Adds an option to folder's context menu, which allows to focus file explorer on chosen folder and its files and subdirectories, while hiding all the other elements.
 
-In order to disable this mode, you have to use a global command 'Disable folder focus mode'.
+In order to disable this mode, you have to use a global command 'Disable folder focus mode' or open context menu for previously chosen folder and choose 'Unfocus'.
 
 Plugin is a quick draft, as I really needed this function. I strongly recommend joining and developing it with me to make it even more useful 🌚.
 
