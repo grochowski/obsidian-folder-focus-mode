@@ -1,6 +1,6 @@
 import { Plugin, App, Editor, MarkdownView } from 'obsidian';
 import { ExplorerLeaf, ExplorerView } from './@types/obsidian';
-import * as path from 'path';
+import { getRelativePath, isAbsolutePath, getDirname } from './util';
 
 interface FolderFocusModePluginSettings { }
 
@@ -21,7 +21,7 @@ export default class FolderFocusModePlugin extends Plugin {
 	 * @param {string} currentFolder
 	 */
 	shouldBeVisible(newFocusFolder: string, currentFolder: string) {
-		const relative = path.relative(newFocusFolder, currentFolder);
+		const relative = getRelativePath(newFocusFolder, currentFolder);
 
 		const stringSplits = newFocusFolder.split('/');
 		const parentsArray = stringSplits.reduce((acc, val, i) => {
@@ -30,7 +30,7 @@ export default class FolderFocusModePlugin extends Plugin {
 			return acc
 		}, []);
 
-		return (relative && !relative.startsWith('..') && !path.isAbsolute(relative)) || parentsArray.includes(currentFolder) || currentFolder === '/';
+		return (relative && !relative.startsWith('..') && !isAbsolutePath(relative)) || parentsArray.includes(currentFolder) || currentFolder === '/';
 	}
 
 	/**
@@ -46,23 +46,15 @@ export default class FolderFocusModePlugin extends Plugin {
 		const fileExplorers = this.app.workspace.getLeavesOfType('file-explorer');
 		fileExplorers.forEach((fileExplorer: ExplorerLeaf) => {
 
-			const registeredFileExplorers: Array<ExplorerView> = [];
-		
-			registeredFileExplorers.push(fileExplorer.view);
-		
-			registeredFileExplorers.forEach(explorerView => {
-
-				for (var key in explorerView.fileItems) {
-					if (explorerView.fileItems.hasOwnProperty(key)) {
-						if(this.shouldBeVisible(newFocusFolder, key)) {
-							explorerView.fileItems[key].el.classList.remove('hidden-tree-element');
-						} else {
-							explorerView.fileItems[key].el.classList.add('hidden-tree-element');
-						}
+			for (const key in fileExplorer.view.fileItems) {
+				if (fileExplorer.view.fileItems.hasOwnProperty(key)) {
+					if(this.shouldBeVisible(newFocusFolder, key)) {
+						fileExplorer.view.fileItems[key].el.classList.remove('hidden-tree-element');
+					} else {
+						fileExplorer.view.fileItems[key].el.classList.add('hidden-tree-element');
 					}
 				}
-
-			});
+			}
 
 		});
 	}
@@ -79,19 +71,11 @@ export default class FolderFocusModePlugin extends Plugin {
 		const fileExplorers = this.app.workspace.getLeavesOfType('file-explorer');
 		fileExplorers.forEach((fileExplorer: ExplorerLeaf) => {
 
-			const registeredFileExplorers: Array<ExplorerView> = [];
-		
-			registeredFileExplorers.push(fileExplorer.view);
-		
-			registeredFileExplorers.forEach(explorerView => {
-
-				for (var key in explorerView.fileItems) {
-					if (explorerView.fileItems.hasOwnProperty(key)) {
-						explorerView.fileItems[key].el.classList.remove('hidden-tree-element');
-					}
+			for (const key in fileExplorer.view.fileItems) {
+				if (fileExplorer.view.fileItems.hasOwnProperty(key)) {
+					fileExplorer.view.fileItems[key].el.classList.remove('hidden-tree-element');
 				}
-
-			});
+			}
 
 		});
 	}
@@ -135,11 +119,20 @@ export default class FolderFocusModePlugin extends Plugin {
 		this.addCommand({
 			id: "folder-focus-mode-focus-active",
 			name: "Enable folder focus mode for active file",
-			callback: () => {
+			checkCallback: (checking: boolean) => {
 				const currentFile = this.app.workspace.getActiveFile();
-				const currentFolderPath = path.dirname(currentFile.path);
-				this.hideTreeElements(currentFolderPath);
-			},
+
+				if (currentFile) {
+					if (!checking) {
+						const currentFolderPath = getDirname(currentFile.path);
+						this.hideTreeElements(currentFolderPath);
+					}
+					
+					return true;
+				}
+
+				return false;
+			}
 		});
 
 	}
