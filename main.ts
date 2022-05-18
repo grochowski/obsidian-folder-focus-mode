@@ -1,10 +1,17 @@
 import { Plugin, App, Editor, MarkdownView } from 'obsidian';
+import { FolderFocusModeSettingTab } from 'settings';
 import { ExplorerLeaf, ExplorerView } from './@types/obsidian';
-import { getRelativePath, isAbsolutePath, getDirname } from './util';
+import { getRelativePath, isAbsolutePath, getDirname, getRootDirname } from './util';
 
-interface FolderFocusModePluginSettings { }
+interface FolderFocusModePluginSettings { 
+	autofocusMode: boolean;
+	autofocusRoot: boolean;
+}
 
-const DEFAULT_SETTINGS: FolderFocusModePluginSettings = { }
+const DEFAULT_SETTINGS: FolderFocusModePluginSettings = {
+	autofocusMode: true,
+	autofocusRoot: false,
+}
 
 export default class FolderFocusModePlugin extends Plugin {
 	settings: FolderFocusModePluginSettings;
@@ -21,6 +28,7 @@ export default class FolderFocusModePlugin extends Plugin {
 	 * @param {string} currentFolder
 	 */
 	shouldBeVisible(newFocusFolder: string, currentFolder: string) {
+		console.log(newFocusFolder, currentFolder);
 		const relative = getRelativePath(newFocusFolder, currentFolder);
 
 		const stringSplits = newFocusFolder.split('/');
@@ -80,7 +88,18 @@ export default class FolderFocusModePlugin extends Plugin {
 		});
 	}
 
+	async loadSettings() {    
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());  
+	}
+
+	async saveSettings() {    
+		await this.saveData(this.settings);  
+	}
+
 	async onload() {
+
+		await this.loadSettings();
+		this.addSettingTab(new FolderFocusModeSettingTab(this.app, this));
 
 		this.focusModeEnabled = false;
 
@@ -105,6 +124,17 @@ export default class FolderFocusModePlugin extends Plugin {
 				}
 			})
 		);
+
+		this.registerEvent(
+			this.app.workspace.on("file-open", (file) => {
+				console.log('a', this.settings.autofocusMode);
+				if(this.focusModeEnabled && this.settings.autofocusMode && 
+						!this.shouldBeVisible(this.focusModePath, file.path)) {
+					const currentFolderPath = this.settings.autofocusRoot ? getRootDirname(file.path) : getDirname(file.path);
+					this.hideTreeElements(currentFolderPath);
+				}
+			})
+		)
 
 		// global command for resetting the focus mode
 		this.addCommand({
@@ -140,4 +170,6 @@ export default class FolderFocusModePlugin extends Plugin {
 	onunload() {
 
 	}
+
+
 }

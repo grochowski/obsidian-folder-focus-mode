@@ -90,8 +90,13 @@ const getDirname = (path: string): string => {
 	return path.substring(0, path.lastIndexOf("/"));
 }
 
+const getRootDirname = (path: string): string => {
+	return path.substring(0, path.indexOf("/"));
+}
+
 export {
 	getRelativePath,
 	isAbsolutePath,
-	getDirname
+	getDirname,
+	getRootDirname
 }
