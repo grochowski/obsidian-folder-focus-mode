@@ -1,6 +1,9 @@
-import { Plugin, App, Editor, MarkdownView } from 'obsidian';
+import {
+	Plugin,
+	WorkspaceLeaf, setIcon
+} from 'obsidian';
 import { FolderFocusModeSettingTab } from 'settings';
-import { ExplorerLeaf, ExplorerView } from './@types/obsidian';
+import { ExplorerLeaf } from './@types/obsidian';
 import { getRelativePath, isAbsolutePath, getDirname, getRootDirname } from './util';
 
 interface FolderFocusModePluginSettings { 
@@ -19,7 +22,6 @@ export default class FolderFocusModePlugin extends Plugin {
 	focusModeEnabled: boolean;
 	focusModePath: string|null;
 
-
 	/**
 	 * This function returns true if current folder is a chosen focus folder, its child or vault's root
 	 *
@@ -28,7 +30,6 @@ export default class FolderFocusModePlugin extends Plugin {
 	 * @param {string} currentFolder
 	 */
 	shouldBeVisible(newFocusFolder: string, currentFolder: string) {
-		console.log(newFocusFolder, currentFolder);
 		const relative = getRelativePath(newFocusFolder, currentFolder);
 
 		const stringSplits = newFocusFolder.split('/');
@@ -97,11 +98,24 @@ export default class FolderFocusModePlugin extends Plugin {
 	}
 
 	async onload() {
-
+		console.log('focus folder loaded')
 		await this.loadSettings();
 		this.addSettingTab(new FolderFocusModeSettingTab(this.app, this));
 
 		this.focusModeEnabled = false;
+		this.app.workspace.onLayoutReady(() => {
+			const explorers = this.getFileExplorers();
+			explorers.forEach((exp) => {
+				this.addFocusFolderButton(exp);
+			})
+		});
+
+		this.registerEvent(this.app.workspace.on('layout-change', () => {
+			const explorers = this.getFileExplorers();
+			explorers.forEach((exp) => {
+				this.addFocusFolderButton(exp);
+			});
+		}));
 
 		// context menu for folders
 		this.registerEvent(
@@ -168,8 +182,60 @@ export default class FolderFocusModePlugin extends Plugin {
 	}
 
 	onunload() {
-
+		console.log('focus folder unloaded')
+		const explorers = this.getFileExplorers()
+		explorers.forEach((exp) => {
+			FolderFocusModePlugin.removeFocusFolderButton(exp);
+		});
 	}
 
+	private getFileExplorers():WorkspaceLeaf[] {
+		return this.app.workspace.getLeavesOfType('file-explorer');
+	}
 
+	private static getFocusButton(explorer: WorkspaceLeaf): HTMLDivElement |null {
+	    return explorer.view.containerEl.querySelector(
+      '.focus-folder-button'
+    	);
+	}
+
+	private addFocusFolderButton(explorer: WorkspaceLeaf):void {
+		const container = explorer.view.containerEl as HTMLDivElement;
+		const navContainer = container.querySelector('div.nav-buttons-container') as HTMLDivElement;
+		if (!navContainer) {
+			return null;
+		}
+		const existingButton = FolderFocusModePlugin.getFocusButton(explorer);
+		if (existingButton){
+			return;
+		}
+		const newIcon = document.createElement('div');
+		setIcon(newIcon, 'eye');
+		newIcon.setAttribute('aria-label', 'Focus folder');
+		newIcon.classList.add('nav-action-button', 'focus-folder-button');
+		this.registerDomEvent(newIcon, 'click', () => {
+			const currentFile = this.app.workspace.getActiveFile();
+			if (currentFile) {
+				const isCurrentlyFocused = this.focusModePath === currentFile.path;
+				if (isCurrentlyFocused) {
+					this.showAllTreeElements();
+					setIcon(newIcon, 'eye');
+					newIcon.setAttribute('aria-label', 'Focus folder');
+				} else {
+					this.hideTreeElements(currentFile.path);
+					setIcon(newIcon, 'eye-off');
+					newIcon.setAttribute('aria-label', 'Unfocus folder');
+				}
+			}
+		});
+		navContainer.appendChild(newIcon);
+	}
+	private static removeFocusFolderButton(explorer: WorkspaceLeaf):void {
+		const button = FolderFocusModePlugin.getFocusButton(explorer);
+		if (button) {
+			button.remove();
+		}
+	}
 }
+
+
