@@ -122,7 +122,6 @@ export default class FolderFocusModePlugin extends Plugin {
 			this.app.workspace.on("file-menu", (menu, file) => {
 				if(!file?.extension) {
 					const isCurrentlyFocused = this.focusModePath === file.path;
-
 					menu.addItem((item) => {
 							item
 							.setTitle(isCurrentlyFocused ? "Unfocus" : "Focus on this folder")
@@ -142,19 +141,19 @@ export default class FolderFocusModePlugin extends Plugin {
 		this.registerEvent(
 			this.app.workspace.on("file-open", (file) => {
 				console.log('a', this.settings.autofocusMode);
-				if(this.focusModeEnabled && this.settings.autofocusMode && 
-						!this.shouldBeVisible(this.focusModePath, file.path)) {
+				if(this.focusModeEnabled && this.settings.autofocusMode && !this.shouldBeVisible(this.focusModePath, file.path)) {
 					const currentFolderPath = this.settings.autofocusRoot ? getRootDirname(file.path) : getDirname(file.path);
 					this.hideTreeElements(currentFolderPath);
 					const explorers = this.getFileExplorers()
 					explorers.forEach((exp) => {
-						const navContainer = exp.view.containerEl.querySelector(
-      				'.focus-folder-button') as HTMLElement;
-						if (navContainer) {
-							setIcon(navContainer, 'eye');
-							navContainer.setAttribute('aria-label', 'Focus on this' +
-								' file folder');
+						const container = exp.view.containerEl as HTMLDivElement;
+						const navContainer = container.querySelector('div.nav-buttons-container') as HTMLDivElement;
+						if (!navContainer) {
+							return null;
 						}
+						const existingButton = FolderFocusModePlugin.getFocusButton(exp);
+						existingButton.classList.add('focus-close');
+						this.addFocusFolderButton(exp);
 					});
 				}
 			})
@@ -181,10 +180,8 @@ export default class FolderFocusModePlugin extends Plugin {
 						const currentFolderPath = getDirname(currentFile.path);
 						this.hideTreeElements(currentFolderPath);
 					}
-					
 					return true;
 				}
-
 				return false;
 			}
 		});
@@ -209,6 +206,22 @@ export default class FolderFocusModePlugin extends Plugin {
     	);
 	}
 
+	private focusedButton(icon:HTMLDivElement) {
+		this.showAllTreeElements();
+		setIcon(icon, 'eye');
+		icon.classList.remove('focus-close');
+		icon.classList.add('focus-open');
+		icon.setAttribute('aria-label', 'Focus on this file folder');
+	}
+
+	private unfocusedButton(icon: HTMLDivElement, filepath: string) {
+		this.hideTreeElements(filepath);
+		setIcon(icon, 'eye-off');
+		icon.classList.remove('focus-open')
+		icon.classList.add('focus-close');
+		icon.setAttribute('aria-label', 'Unfocus folder');
+	}
+
 	private addFocusFolderButton(explorer: WorkspaceLeaf):void {
 		const container = explorer.view.containerEl as HTMLDivElement;
 		const navContainer = container.querySelector('div.nav-buttons-container') as HTMLDivElement;
@@ -222,24 +235,19 @@ export default class FolderFocusModePlugin extends Plugin {
 		const newIcon = document.createElement('div');
 		setIcon(newIcon, 'eye');
 		newIcon.setAttribute('aria-label', 'Focus on this file folder');
-		newIcon.classList.add('nav-action-button', 'focus-folder-button');
+		newIcon.classList.add('nav-action-button', 'focus-folder-button', 'focus-open');
 		this.registerDomEvent(newIcon, 'click', () => {
 			const currentFile = this.app.workspace.getActiveFile();
 			if (currentFile) {
 				const isCurrentlyFocused = this.focusModePath === currentFile.path;
 				if (isCurrentlyFocused) {
-					this.showAllTreeElements();
-					setIcon(newIcon, 'eye');
-					newIcon.setAttribute('aria-label', 'Focus on this file folder');
-				} else {
-					this.hideTreeElements(currentFile.path);
-					setIcon(newIcon, 'eye-off');
-					newIcon.setAttribute('aria-label', 'Unfocus folder');
+					this.focusedButton(newIcon);
+				} else if (newIcon.classList[2]==='focus-open') {
+					const currentFolderPath = this.settings.autofocusRoot ? getRootDirname(currentFile.path) : getDirname(currentFile.path);
+					this.unfocusedButton(newIcon, currentFolderPath)
+				} else if (newIcon.classList[2] == 'focus-close') {
+					this.focusedButton(newIcon);
 				}
-			} else {
-				this.hideTreeElements(currentFile.path);
-					setIcon(newIcon, 'eye-off');
-					newIcon.setAttribute('aria-label', 'Unfocus folder');
 			}
 		});
 		navContainer.appendChild(newIcon);
