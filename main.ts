@@ -146,6 +146,16 @@ export default class FolderFocusModePlugin extends Plugin {
 						!this.shouldBeVisible(this.focusModePath, file.path)) {
 					const currentFolderPath = this.settings.autofocusRoot ? getRootDirname(file.path) : getDirname(file.path);
 					this.hideTreeElements(currentFolderPath);
+					const explorers = this.getFileExplorers()
+					explorers.forEach((exp) => {
+						const navContainer = exp.view.containerEl.querySelector(
+      				'.focus-folder-button') as HTMLElement;
+						if (navContainer) {
+							setIcon(navContainer, 'eye');
+							navContainer.setAttribute('aria-label', 'Focus on this' +
+								' file folder');
+						}
+					});
 				}
 			})
 		)
