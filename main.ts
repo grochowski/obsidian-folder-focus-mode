@@ -9,11 +9,13 @@ import { getRelativePath, isAbsolutePath, getDirname, getRootDirname } from './u
 interface FolderFocusModePluginSettings { 
 	autofocusMode: boolean;
 	autofocusRoot: boolean;
+	focusButton: boolean;
 }
 
 const DEFAULT_SETTINGS: FolderFocusModePluginSettings = {
 	autofocusMode: true,
 	autofocusRoot: false,
+	focusButton: false,
 }
 
 export default class FolderFocusModePlugin extends Plugin {
@@ -103,12 +105,14 @@ export default class FolderFocusModePlugin extends Plugin {
 		this.addSettingTab(new FolderFocusModeSettingTab(this.app, this));
 
 		this.focusModeEnabled = false;
-		this.app.workspace.onLayoutReady(() => {
-			const explorers = this.getFileExplorers();
-			explorers.forEach((exp) => {
-				this.addFocusFolderButton(exp);
-			})
-		});
+		if (this.settings.focusButton) {
+			this.app.workspace.onLayoutReady(() => {
+				const explorers = this.getFileExplorers();
+				explorers.forEach((exp) => {
+					this.addFocusFolderButton(exp);
+				})
+			});
+		}
 
 		this.registerEvent(this.app.workspace.on('layout-change', () => {
 			const explorers = this.getFileExplorers();

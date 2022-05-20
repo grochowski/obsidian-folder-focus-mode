@@ -31,5 +31,16 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					})
 			)
+		new Setting(containerEl)
+			.setName("Button on explorer")
+			.setDesc("Add a button on the top of the file explorer (Need Reloading to work)")
+			.addToggle((component)=>
+				component
+					.setValue(this.plugin.settings.focusButton)
+					.onChange(async(value)=>{
+						this.plugin.settings.focusButton=value;
+						await this.plugin.saveSettings();
+				})
+			)
 	}
 }
