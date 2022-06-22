@@ -37,8 +37,8 @@ export default class FolderFocusModePlugin extends Plugin {
 		const stringSplits = newFocusFolder.split('/');
 		const parentsArray = stringSplits.reduce((acc, val, i) => {
 			if (i === 0) return [val]
-			acc.push( acc[i-1] + '/' + val )
-			return acc
+			acc.push(acc[i-1] + '/' + val);
+			return acc;
 		}, []);
 
 		return (relative && !relative.startsWith('..') && !isAbsolutePath(relative)) || parentsArray.includes(currentFolder) || currentFolder === '/';
@@ -91,16 +91,16 @@ export default class FolderFocusModePlugin extends Plugin {
 		});
 	}
 
-	async loadSettings() {    
+	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());  
 	}
 
-	async saveSettings() {    
+	async saveSettings() {
 		await this.saveData(this.settings);  
 	}
 
 	async onload() {
-		console.log('focus folder loaded')
+		console.log('focus folder loaded');
 		await this.loadSettings();
 		this.addSettingTab(new FolderFocusModeSettingTab(this.app, this));
 
@@ -148,7 +148,7 @@ export default class FolderFocusModePlugin extends Plugin {
 				if(this.focusModeEnabled && this.settings.autofocusMode && !this.shouldBeVisible(this.focusModePath, file.path)) {
 					const currentFolderPath = this.settings.autofocusRoot ? getRootDirname(file.path) : getDirname(file.path);
 					this.hideTreeElements(currentFolderPath);
-					const explorers = this.getFileExplorers()
+					const explorers = this.getFileExplorers();
 					explorers.forEach((exp) => {
 						const container = exp.view.containerEl as HTMLDivElement;
 						const navContainer = container.querySelector('div.nav-buttons-container') as HTMLDivElement;
@@ -161,7 +161,7 @@ export default class FolderFocusModePlugin extends Plugin {
 					});
 				}
 			})
-		)
+		);
 
 		// global command for resetting the focus mode
 		this.addCommand({
@@ -193,8 +193,8 @@ export default class FolderFocusModePlugin extends Plugin {
 	}
 
 	onunload() {
-		console.log('focus folder unloaded')
-		const explorers = this.getFileExplorers()
+		console.log('focus folder unloaded');
+		const explorers = this.getFileExplorers();
 		explorers.forEach((exp) => {
 			FolderFocusModePlugin.removeFocusFolderButton(exp);
 		});
@@ -205,9 +205,7 @@ export default class FolderFocusModePlugin extends Plugin {
 	}
 
 	private static getFocusButton(explorer: WorkspaceLeaf): HTMLDivElement |null {
-	    return explorer.view.containerEl.querySelector(
-      '.focus-folder-button'
-    	);
+		return explorer.view.containerEl.querySelector('.focus-folder-button');
 	}
 
 	private focusedButton(icon:HTMLDivElement) {
@@ -221,7 +219,7 @@ export default class FolderFocusModePlugin extends Plugin {
 	private unfocusedButton(icon: HTMLDivElement, filepath: string) {
 		this.hideTreeElements(filepath);
 		setIcon(icon, 'eye-off');
-		icon.classList.remove('focus-open')
+		icon.classList.remove('focus-open');
 		icon.classList.add('focus-close');
 		icon.setAttribute('aria-label', 'Unfocus folder');
 	}
@@ -241,14 +239,15 @@ export default class FolderFocusModePlugin extends Plugin {
 		newIcon.setAttribute('aria-label', 'Focus on this file folder');
 		newIcon.classList.add('nav-action-button', 'focus-folder-button', 'focus-open');
 		this.registerDomEvent(newIcon, 'click', () => {
-			const currentFile = this.app.workspace.getActiveFile();
+			const fileActive = this.app.workspace.getLeaf().getViewState().state.file;
+			const currentFile = this.app.vault.getAbstractFileByPath(fileActive);
 			if (currentFile) {
 				const isCurrentlyFocused = this.focusModePath === currentFile.path;
 				if (isCurrentlyFocused) {
 					this.focusedButton(newIcon);
 				} else if (newIcon.classList[2]==='focus-open') {
 					const currentFolderPath = this.settings.autofocusRoot ? getRootDirname(currentFile.path) : getDirname(currentFile.path);
-					this.unfocusedButton(newIcon, currentFolderPath)
+					this.unfocusedButton(newIcon, currentFolderPath);
 				} else if (newIcon.classList[2] == 'focus-close') {
 					this.focusedButton(newIcon);
 				}
