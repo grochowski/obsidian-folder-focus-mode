@@ -1,9 +1,9 @@
 const normalizeArray = (parts: string[], allowAboveRoot: boolean) => {
-	var res = [];
-	for (var i = 0; i < parts.length; i++) {
-	var p = parts[i];
+	const res = [];
+	for (let i = 0; i < parts.length; i++) {
+		const p = parts[i];
 
-	// ignore empty parts
+		// ignore empty parts
 	if (!p || p === '.')
 		continue;
 
@@ -22,14 +22,14 @@ const normalizeArray = (parts: string[], allowAboveRoot: boolean) => {
 }
 
 const trimArray = (arr: any[]) => {
-	var lastIndex = arr.length - 1;
-	var start = 0;
+	const lastIndex = arr.length - 1;
+	let start = 0;
 	for (; start <= lastIndex; start++) {
 		if (arr[start])
 			break;
 	}
 
-	var end = lastIndex;
+	let end = lastIndex;
 	for (; end >= 0; end--) {
 		if (arr[end])
 			break;
@@ -44,7 +44,7 @@ const trimArray = (arr: any[]) => {
 
 const resolve = (path: string) => {
 	let resolvedPath = '',
-	resolvedAbsolute = false;
+	resolvedAbsolute: boolean;
 
 	resolvedPath = path + '/' + resolvedPath;
 	resolvedAbsolute = path[0] === '/';

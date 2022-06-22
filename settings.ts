@@ -41,6 +41,6 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 						this.plugin.settings.focusButton=value;
 						await this.plugin.saveSettings();
 				})
-			)
-	}
+			);
+	};
 }
