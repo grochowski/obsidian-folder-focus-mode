@@ -239,8 +239,7 @@ export default class FolderFocusModePlugin extends Plugin {
 		newIcon.setAttribute('aria-label', 'Focus on this file folder');
 		newIcon.classList.add('nav-action-button', 'focus-folder-button', 'focus-open');
 		this.registerDomEvent(newIcon, 'click', () => {
-			const fileActive = this.app.workspace.getLeaf().getViewState().state.file;
-			const currentFile = this.app.vault.getAbstractFileByPath(fileActive);
+			const currentFile = this.app.workspace.getActiveFile();
 			if (currentFile) {
 				const isCurrentlyFocused = this.focusModePath === currentFile.path;
 				if (isCurrentlyFocused) {
