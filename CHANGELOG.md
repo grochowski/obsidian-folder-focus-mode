@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.9.5-0](https://github.com/Mara-Li/obsidian-folder-focus-mode/compare/0.9.4...0.9.5-0) (2022-07-05)
+
 ### [0.9.4](https://github.com/Mara-Li/obsidian-folder-focus-mode/compare/0.9.3...0.9.4) (2022-07-05)
 
 
