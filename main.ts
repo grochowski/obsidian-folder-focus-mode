@@ -1,6 +1,7 @@
 import {
 	Plugin,
-	WorkspaceLeaf, setIcon
+	WorkspaceLeaf, setIcon, TFile,
+	TFolder
 } from 'obsidian';
 import { FolderFocusModeSettingTab } from 'settings';
 import { ExplorerLeaf } from './@types/obsidian';
@@ -10,12 +11,14 @@ interface FolderFocusModePluginSettings {
 	autofocusMode: boolean;
 	autofocusRoot: boolean;
 	focusButton: boolean;
+	focusNote: boolean;
 }
 
 const DEFAULT_SETTINGS: FolderFocusModePluginSettings = {
 	autofocusMode: true,
 	autofocusRoot: false,
 	focusButton: false,
+	focusNote: false
 }
 
 export default class FolderFocusModePlugin extends Plugin {
@@ -33,13 +36,14 @@ export default class FolderFocusModePlugin extends Plugin {
 	 */
 	shouldBeVisible(newFocusFolder: string, currentFolder: string) {
 		const relative = getRelativePath(newFocusFolder, currentFolder);
-
+		console.log(relative);
 		const stringSplits = newFocusFolder.split('/');
 		const parentsArray = stringSplits.reduce((acc, val, i) => {
 			if (i === 0) return [val]
 			acc.push(acc[i-1] + '/' + val);
 			return acc;
 		}, []);
+		console.log(parentsArray);
 
 		return (relative && !relative.startsWith('..') && !isAbsolutePath(relative)) || parentsArray.includes(currentFolder) || currentFolder === '/';
 	}
@@ -89,6 +93,21 @@ export default class FolderFocusModePlugin extends Plugin {
 			}
 
 		});
+	}
+	
+	
+	getDirRoot(file: TFile) {
+		if (this.settings.focusNote) {
+			const linkedFolder = this.app.vault.getAbstractFileByPath(file.path.replace('.md', ''));
+			if (linkedFolder && linkedFolder instanceof TFolder) {
+				return linkedFolder.path;
+			} else {
+				return this.settings.autofocusRoot ? getRootDirname(file.path) : getDirname(file.path);
+			}
+		}
+		else {
+			return this.settings.autofocusRoot ? getRootDirname(file.path) : getDirname(file.path);
+		}
 	}
 
 	async loadSettings() {
@@ -144,9 +163,10 @@ export default class FolderFocusModePlugin extends Plugin {
 
 		this.registerEvent(
 			this.app.workspace.on("file-open", (file) => {
-				console.log('a', this.settings.autofocusMode);
+				console.log('Autofocus ?', this.settings.autofocusMode);
 				if(this.focusModeEnabled && this.settings.autofocusMode && !this.shouldBeVisible(this.focusModePath, file.path)) {
-					const currentFolderPath = this.settings.autofocusRoot ? getRootDirname(file.path) : getDirname(file.path);
+					const currentFolderPath = this.getDirRoot(file);
+					console.log(currentFolderPath);
 					this.hideTreeElements(currentFolderPath);
 					const explorers = this.getFileExplorers();
 					explorers.forEach((exp) => {
@@ -245,7 +265,7 @@ export default class FolderFocusModePlugin extends Plugin {
 				if (isCurrentlyFocused) {
 					this.focusedButton(newIcon);
 				} else if (newIcon.classList[2]==='focus-open') {
-					const currentFolderPath = this.settings.autofocusRoot ? getRootDirname(currentFile.path) : getDirname(currentFile.path);
+					const currentFolderPath = this.getDirRoot(currentFile);
 					this.unfocusedButton(newIcon, currentFolderPath);
 				} else if (newIcon.classList[2] == 'focus-close') {
 					this.focusedButton(newIcon);
