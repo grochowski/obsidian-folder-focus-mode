@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.9.5](https://github.com/Mara-Li/obsidian-folder-focus-mode/compare/0.9.5-0...0.9.5) (2022-08-23)
+
+
+### Features
+
+* adding an option for folder note - external file ([da3e74a](https://github.com/Mara-Li/obsidian-folder-focus-mode/commit/da3e74ad76f1f3e328a5e2a13a3f130a90363468))
+
 ### [0.9.5-0](https://github.com/Mara-Li/obsidian-folder-focus-mode/compare/0.9.4...0.9.5-0) (2022-07-05)
 
 ### [0.9.4](https://github.com/Mara-Li/obsidian-folder-focus-mode/compare/0.9.3...0.9.4) (2022-07-05)
