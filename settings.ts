@@ -7,7 +7,7 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 		this.plugin = plugin;
 	}
 	display(): void {
-		let { containerEl } = this;
+		const { containerEl } = this;
 		containerEl.empty();
 		new Setting(containerEl)
 			.setName("Auto-Focus when hidden")
@@ -31,5 +31,27 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					})
 			)
+		new Setting(containerEl)
+			.setName("Button on explorer")
+			.setDesc("Add a button on the top of the file explorer (Need Reloading to work)")
+			.addToggle((component)=>
+				component
+					.setValue(this.plugin.settings.focusButton)
+					.onChange(async(value)=>{
+						this.plugin.settings.focusButton=value;
+						await this.plugin.saveSettings();
+				})
+			);
+		new Setting(containerEl)
+			.setName('Folder Note : External files')
+			.setDesc('Focus on the folder linked with the folder note')
+			.addToggle((component)=>
+				component
+					.setValue(this.plugin.settings.focusNote)
+					.onChange(async(value)=>{
+						this.plugin.settings.focusNote=value;
+						await this.plugin.saveSettings();
+				})
+			);
 	}
 }
