@@ -192,6 +192,15 @@ export default class FolderFocusModePlugin extends Plugin {
 			},
 		});
 
+		// global command for toggling the autofocus mode
+		this.addCommand({
+			id: "folder-focus-mode-toggle-autofocus",
+			name: "Toggle autofocus mode",
+			callback: () => {
+				this.settings.autofocusMode = !this.settings.autofocusMode;
+			},
+		});
+
 		// global command for enabling the focus mode for parent folder of current file
 		this.addCommand({
 			id: "folder-focus-mode-focus-active",

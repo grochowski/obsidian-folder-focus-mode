@@ -8,18 +8,19 @@ In order to disable this mode, you have to use a global command 'Disable folder 
 
 Plugin is a quick draft, as I really needed this function. I strongly recommend joining and developing it with me to make it even more useful 🌚.
 
+Special thanks to:
+- [Mara-Li](https://github.com/Mara-Li)
+
+#### Install the plugin
+
+You can activate this plugin within Obsidian by searching for 'focus mode' among the community plugins.
+
 #### Manually installing the plugin
 
 - Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/obsidian-folder-focus-mode/`.
-- [Using BRAT](https://github.com/TfTHacker/obsidian42-brat) to keep update, with adding : `Mara-Li/obsidian-folder-focus-mode`
 
 #### Development
 
 - Clone this repo.
 - `npm i` or `yarn` to install dependencies
 - `npm run dev` to start compilation in watch mode.
-
-### Support
-
-<p align="center"><a href="https://ko-fi.com/MaraLi__"> <img align="center" src="https://cdn.ko-fi.com/cdn/kofi3.png?v=3" height="50" width="210" alt="MaraLi__" /></a></p>
-
