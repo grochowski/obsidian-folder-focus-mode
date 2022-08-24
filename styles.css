@@ -1,3 +1,5 @@
 .hidden-tree-element {
-	display: none;
+	height: 0px;
+	opacity: 0;
+	pointer-events: none;
 }

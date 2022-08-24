@@ -71,7 +71,13 @@ export default class FolderFocusModePlugin extends Plugin {
 				}
 			}
 
+			const existingButton = FolderFocusModePlugin.getFocusButton(fileExplorer);
+			if(existingButton) {
+				this.unfocusedButton(existingButton);
+			}
+
 		});
+		
 	}
 
 	/**
@@ -90,6 +96,11 @@ export default class FolderFocusModePlugin extends Plugin {
 				if (fileExplorer.view.fileItems.hasOwnProperty(key)) {
 					fileExplorer.view.fileItems[key].el.classList.remove('hidden-tree-element');
 				}
+			}
+
+			const existingButton = FolderFocusModePlugin.getFocusButton(fileExplorer);
+			if(existingButton) {
+				this.focusedButton(existingButton);
 			}
 
 		});
@@ -238,15 +249,13 @@ export default class FolderFocusModePlugin extends Plugin {
 	}
 
 	private focusedButton(icon:HTMLDivElement) {
-		this.showAllTreeElements();
 		setIcon(icon, 'eye');
 		icon.classList.remove('focus-close');
 		icon.classList.add('focus-open');
 		icon.setAttribute('aria-label', 'Focus on this file folder');
 	}
 
-	private unfocusedButton(icon: HTMLDivElement, filepath: string) {
-		this.hideTreeElements(filepath);
+	private unfocusedButton(icon: HTMLDivElement) {
 		setIcon(icon, 'eye-off');
 		icon.classList.remove('focus-open');
 		icon.classList.add('focus-close');
@@ -272,11 +281,14 @@ export default class FolderFocusModePlugin extends Plugin {
 			if (currentFile) {
 				const isCurrentlyFocused = this.focusModePath === currentFile.path;
 				if (isCurrentlyFocused) {
+					this.showAllTreeElements();
 					this.focusedButton(newIcon);
 				} else if (newIcon.classList[2]==='focus-open') {
 					const currentFolderPath = this.getDirRoot(currentFile);
-					this.unfocusedButton(newIcon, currentFolderPath);
+					this.hideTreeElements(currentFolderPath);
+					this.unfocusedButton(newIcon);
 				} else if (newIcon.classList[2] == 'focus-close') {
+					this.showAllTreeElements();
 					this.focusedButton(newIcon);
 				}
 			}
