@@ -275,7 +275,7 @@ export default class FolderFocusModePlugin extends Plugin {
 		const newIcon = document.createElement('div');
 		setIcon(newIcon, 'eye');
 		newIcon.setAttribute('aria-label', 'Focus on this file folder');
-		newIcon.classList.add('nav-action-button', 'clickable-icon', 'focus-folder-button', 'focus-open');
+		newIcon.classList.add('nav-action-button', 'focus-folder-button', 'focus-open', 'clickable-icon');
 		this.registerDomEvent(newIcon, 'click', () => {
 			const currentFile = this.app.workspace.getActiveFile();
 			if (currentFile) {
@@ -283,11 +283,11 @@ export default class FolderFocusModePlugin extends Plugin {
 				if (isCurrentlyFocused) {
 					this.showAllTreeElements();
 					this.focusedButton(newIcon);
-				} else if (newIcon.classList[2]==='focus-open') {
+				} else if (newIcon.classList.contains('focus-open')) {
 					const currentFolderPath = this.getDirRoot(currentFile);
 					this.hideTreeElements(currentFolderPath);
 					this.unfocusedButton(newIcon);
-				} else if (newIcon.classList[2] == 'focus-close') {
+				} else if (newIcon.classList.contains('focus-close')) {
 					this.showAllTreeElements();
 					this.focusedButton(newIcon);
 				}
