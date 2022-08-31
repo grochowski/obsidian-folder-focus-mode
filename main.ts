@@ -275,7 +275,7 @@ export default class FolderFocusModePlugin extends Plugin {
 		const newIcon = document.createElement('div');
 		setIcon(newIcon, 'eye');
 		newIcon.setAttribute('aria-label', 'Focus on this file folder');
-		newIcon.classList.add('nav-action-button', 'focus-folder-button', 'focus-open');
+		newIcon.classList.add('nav-action-button', 'clickable-icon', 'focus-folder-button', 'focus-open');
 		this.registerDomEvent(newIcon, 'click', () => {
 			const currentFile = this.app.workspace.getActiveFile();
 			if (currentFile) {
