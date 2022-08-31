@@ -9,7 +9,7 @@ In order to disable this mode, you have to use a global command 'Disable folder 
 Plugin is a quick draft, as I really needed this function. I strongly recommend joining and developing it with me to make it even more useful 🌚.
 
 Special thanks to:
-- [Mara-Li](https://github.com/Mara-Li)
+- [Lisandra-dev](https://github.com/Lisandra-dev)
 
 #### Install the plugin
 
