@@ -215,10 +215,10 @@ export default class FolderFocusModePlugin extends Plugin {
 		}
 
 		// create context menu for folders
-		const initialiseFolderContextMenu = (menu, file) => {
+		const initialiseFolderContextMenu = (menu: any, file: any) => {
 			if(!file?.extension) {
 				const isCurrentlyFocused = this.focusModePath === file.path;
-				menu.addItem((item) => {
+				menu.addItem((item: any) => {
 						item
 						.setTitle(isCurrentlyFocused ? "Unfocus" : "Focus on this folder")
 						.setIcon("eye")
@@ -332,17 +332,17 @@ export default class FolderFocusModePlugin extends Plugin {
 	 */
 	resetClasses() {
 		const explorers = this.getFileExplorers();
-		explorers.forEach((fileExplorer) => {
+		explorers.forEach((fileExplorer: WorkspaceLeaf) => {
 			if(this.focusModeEnabled) {
-				fileExplorer.containerEl.classList.add('folder-focus-mode');
+				fileExplorer.view.containerEl.classList.add('folder-focus-mode');
 			} else {
-				fileExplorer.containerEl.classList.remove('folder-focus-mode');
+				fileExplorer.view.containerEl.classList.remove('folder-focus-mode');
 			}
 
 			if(this.settings.simplifiedView) {
-				fileExplorer.containerEl.classList.add('folder-focus-mode-simplified');
+				fileExplorer.view.containerEl.classList.add('folder-focus-mode-simplified');
 			} else {
-				fileExplorer.containerEl.classList.remove('folder-focus-mode-simplified');
+				fileExplorer.view.containerEl.classList.remove('folder-focus-mode-simplified');
 			}
 		});
 	}
