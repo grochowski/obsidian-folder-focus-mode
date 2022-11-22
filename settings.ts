@@ -1,11 +1,14 @@
 import FolderFocusModePlugin from "main";
 import { App, PluginSettingTab, Setting } from "obsidian";
 export class FolderFocusModeSettingTab extends PluginSettingTab {
+
 	plugin: FolderFocusModePlugin;
+
 	constructor(app: App, plugin: FolderFocusModePlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
+
 	display(): void {
 		const { containerEl } = this;
 		containerEl.empty();
@@ -19,7 +22,8 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 						this.plugin.settings.autofocusMode = value;
 						await this.plugin.saveSettings();
 					})
-			)
+			);
+
 		new Setting(containerEl)
 			.setName("Auto-Focus on root")
 			.setDesc("Focus on the first folder from root if the auto focus setting is enabled")
@@ -30,7 +34,33 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 						this.plugin.settings.autofocusRoot = value;
 						await this.plugin.saveSettings();
 					})
-			)
+			);
+
+		new Setting(containerEl)
+			.setName("Force auto-focus on parent directory")
+			.setDesc("Always auto-focus on the parent directory of current file, even if it is already visible")
+			.addToggle((component) =>
+				component
+					.setValue(this.plugin.settings.autofocusForced)
+					.onChange(async (value) => {
+						this.plugin.settings.autofocusForced = value;
+						await this.plugin.saveSettings();
+					})
+			);
+
+		new Setting(containerEl)
+			.setName("Simplified view")
+			.setDesc("Hide parent directories when focusing on a folder (saves space when using nested folders)")
+			.addToggle((component) =>
+				component
+					.setValue(this.plugin.settings.simplifiedView)
+					.onChange(async (value) => {
+						this.plugin.settings.simplifiedView = value;
+						this.plugin.resetClasses();
+						await this.plugin.saveSettings();
+					})
+			);
+
 		new Setting(containerEl)
 			.setName("Button on explorer")
 			.setDesc("Add a button on the top of the file explorer (Need Reloading to work)")
@@ -42,8 +72,9 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 				})
 			);
+
 		new Setting(containerEl)
-			.setName('Folder Note : External files')
+			.setName('Folder Note: External files')
 			.setDesc('Focus on the folder linked with the folder note')
 			.addToggle((component)=>
 				component

@@ -1,5 +1,19 @@
-.hidden-tree-element {
+.folder-focus-mode .hidden-tree-element {
 	height: 0px;
 	opacity: 0;
 	pointer-events: none;
+}
+
+.folder-focus-mode.folder-focus-mode-simplified .folderfocus-parent:not(.has-focus)>.nav-folder-title {
+	height: 0px;
+	opacity: 0;
+	pointer-events: none;
+	margin:0;
+	padding: 0;
+}
+
+.folder-focus-mode.folder-focus-mode-simplified div.nav-folder.mod-root .nav-folder.folderfocus-parent:not(.has-focus)>.nav-folder-children {    
+	padding-left: 0;
+    margin: 0;
+    border: none;
 }
