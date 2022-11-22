@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.9.9](https://github.com/grochowski/obsidian-folder-focus-mode/compare/0.9.8...0.9.9) (2022-11-22)
+
+
+### Features
+
+* simplified view and forced autofocus setting ([9640362](https://github.com/grochowski/obsidian-folder-focus-mode/commit/9640362234ba7af0f8308f94b3f81a358fd05b90))
+
 ### [0.9.7](https://github.com/grochowski/obsidian-folder-focus-mode/compare/0.9.6...0.9.7) (2022-08-24)
 
 ### [0.9.6](https://github.com/grochowski/obsidian-folder-focus-mode/compare/0.9.3...0.9.6) (2022-08-23)
