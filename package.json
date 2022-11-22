@@ -1,12 +1,12 @@
 {
 	"name": "obsidian-folder-focus-mode",
-	"version": "0.9.9",
+	"version": "0.9.10",
 	"description": "Focus file explorer on chosen folder and its files and subdirectories, while hiding all the other elements.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-		"version": "node version-bump.mjs && git add manifest.json versions.json",
+		"version": "node version-bump.mjs && git add versions.json",
 		"publish": "commit-and-tag-version"
 	},
 	"commit-and-tag-version": {

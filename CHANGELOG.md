@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.9.10](https://github.com/grochowski/obsidian-folder-focus-mode/compare/0.9.9...0.9.10) (2022-11-22)
+
+
+### Features
+
+* adding a parent folder link for simplified view ([8a9becd](https://github.com/grochowski/obsidian-folder-focus-mode/commit/8a9becd12fcb1ff8bb9556b39c1f491251451a41))
+
 ### [0.9.9](https://github.com/grochowski/obsidian-folder-focus-mode/compare/0.9.8...0.9.9) (2022-11-22)
 
 
