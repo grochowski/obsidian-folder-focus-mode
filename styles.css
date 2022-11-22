@@ -18,17 +18,17 @@
     border: none;
 }
 
-.folder-focus-mode .folderfocus-up-element-link {
+.folder-focus-mode.folder-focus-mode-simplified  .folderfocus-up-element-link {
 	opacity: .6;
 	font-size: 70%;
 }
 
-.folder-focus-mode .folderfocus-up-element-link .nav-folder-title-content::before {
+.folder-focus-mode.folder-focus-mode-simplified  .folderfocus-up-element-link .nav-folder-title-content::before {
 	content: '<';
 	margin-right: 5px;
 }
 
-.folder-focus-mode .folderfocus-up-element-link .nav-folder-collapse-indicator {
+.folder-focus-mode.folder-focus-mode-simplified  .folderfocus-up-element-link .nav-folder-collapse-indicator {
 	pointer-events: none;
 	display: none;
 }
