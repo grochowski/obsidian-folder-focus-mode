@@ -20,8 +20,8 @@ const DEFAULT_SETTINGS: FolderFocusModePluginSettings = {
 	autofocusMode: true,
 	autofocusRoot: false,
 	autofocusForced: false,
-	simplifiedView: false,
-	focusButton: false,
+	simplifiedView: true,
+	focusButton: true,
 	focusNote: false
 }
 
@@ -29,7 +29,8 @@ enum VisibilityType {
 	hide = 0,
 	showAsParent = 1,
 	showAsHeader = 2,
-	alwaysShow = 3
+	showAsBack = 3,
+	alwaysShow = 4
 }
 
 export default class FolderFocusModePlugin extends Plugin {
@@ -55,8 +56,15 @@ export default class FolderFocusModePlugin extends Plugin {
 			return acc;
 		}, []);
 
+		const upElement = parentsArray.length >= 2 ? parentsArray[parentsArray.length - 2] : '/';
+
+
 		if(focusFolder === currentFolder) {
 			return VisibilityType.showAsHeader;
+		}
+
+		if(upElement === currentFolder) {
+			return VisibilityType.showAsBack;
 		}
 
 		if(parentsArray.includes(currentFolder)) {
@@ -112,6 +120,14 @@ export default class FolderFocusModePlugin extends Plugin {
 					} else {
 						fileExplorer.view.fileItems[key].el.classList.remove('folderfocus-header');
 					}
+
+					if(shouldBeVisible === VisibilityType.showAsBack) {
+						fileExplorer.view.fileItems[key].el.classList.add('folderfocus-up-element');
+						fileExplorer.view.fileItems[key].el.children[0].classList.add('folderfocus-up-element-link');
+					} else {
+						fileExplorer.view.fileItems[key].el.classList.remove('folderfocus-up-element');
+						fileExplorer.view.fileItems[key].el.children[0].classList.remove('folderfocus-up-element-link');
+					}
 				}
 			}
 
@@ -140,8 +156,11 @@ export default class FolderFocusModePlugin extends Plugin {
 				if (fileExplorer.view.fileItems.hasOwnProperty(key)) {
 					fileExplorer.view.fileItems[key].el.classList.remove('hidden-tree-element');
 					fileExplorer.view.fileItems[key].el.classList.remove('folderfocus-parent');
+					fileExplorer.view.fileItems[key].el.classList.remove('folderfocus-up-parent');
 				}
 			}
+
+			fileExplorer.view.containerEl.querySelector('.folderfocus-up-element-link')?.classList?.remove('folderfocus-up-element-link');
 
 			const existingButton = FolderFocusModePlugin.getFocusButton(fileExplorer);
 			if(existingButton) {
@@ -236,6 +255,28 @@ export default class FolderFocusModePlugin extends Plugin {
 		this.registerEvent(
 			this.app.workspace.on("file-menu", initialiseFolderContextMenu)
 		);
+
+		// make "up" folder available
+		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
+			evt.preventDefault();
+
+            // get the folder path
+            const elemTarget = (evt.target as HTMLElement);
+			const realTarget = elemTarget.closest('.folderfocus-up-element-link') as HTMLElement;
+
+			if(this.settings.simplifiedView && realTarget) {
+				const upPath = realTarget.dataset?.path;
+				if(upPath) {
+					this.hideTreeElements(upPath);
+
+					setTimeout(() => {
+						elemTarget.click();
+
+					}, 300);
+				}
+			}
+
+        });
 
 		// handle autofocus when opening files
 		this.registerEvent(
