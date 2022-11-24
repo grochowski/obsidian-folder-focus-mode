@@ -6,7 +6,8 @@
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-		"version": "commit-and-tag-version"
+		"version": "npm run build && commit-and-tag-version",
+		"version-dry": "npm run build && commit-and-tag-version --dry-run"
 	},
 	"commit-and-tag-version": {
 		"t": "",
