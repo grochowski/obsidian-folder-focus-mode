@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.9.11](https://github.com/grochowski/obsidian-folder-focus-mode/compare/0.9.10...0.9.11) (2022-11-24)
+
+
+### Bug Fixes
+
+* click events for workspace ([1ce8ac8](https://github.com/grochowski/obsidian-folder-focus-mode/commit/1ce8ac84abd72fcf403db55858997dff1b43641a))
+
 ### [0.9.10](https://github.com/grochowski/obsidian-folder-focus-mode/compare/0.9.9...0.9.10) (2022-11-22)
 
 
