@@ -217,13 +217,13 @@ export default class FolderFocusModePlugin extends Plugin {
 		// load settings and add settings page
 		await this.loadSettings();
 		this.addSettingTab(new FolderFocusModeSettingTab(this.app, this));
+		const explorers = this.getFileExplorers();
 
 		// initialise focus mode indicator and button
 		this.focusModeEnabled = false;
 		if (this.settings.focusButton) {
 
 			const initialiseFocusButton = () => {
-				const explorers = this.getFileExplorers();
 				explorers.forEach((exp) => {
 					this.addFocusFolderButton(exp);
 				})
@@ -256,27 +256,28 @@ export default class FolderFocusModePlugin extends Plugin {
 			this.app.workspace.on("file-menu", initialiseFolderContextMenu)
 		);
 
-		// make "up" folder available
-		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			evt.preventDefault();
-
-            // get the folder path
-            const elemTarget = (evt.target as HTMLElement);
-			const realTarget = elemTarget.closest('.folderfocus-up-element-link') as HTMLElement;
-
-			if(this.settings.simplifiedView && realTarget) {
-				const upPath = realTarget.dataset?.path;
-				if(upPath) {
-					this.hideTreeElements(upPath);
-
-					setTimeout(() => {
-						elemTarget.click();
-
-					}, 300);
+		// make "up" folder available for click events
+		explorers.forEach((explorer) => {
+			this.registerDomEvent(explorer.view.containerEl, 'click', (evt: MouseEvent) => {
+	
+				// get the folder path
+				const elemTarget = (evt.target as HTMLElement);
+				const realTarget = elemTarget.closest('.folderfocus-up-element-link') as HTMLElement;
+	
+				if(this.settings.simplifiedView && realTarget) {
+					const upPath = realTarget.dataset?.path;
+					if(upPath) {
+						this.hideTreeElements(upPath);
+	
+						setTimeout(() => {
+							elemTarget.click();
+	
+						}, 300);
+					}
 				}
-			}
-
-        });
+	
+			});
+		})
 
 		// handle autofocus when opening files
 		this.registerEvent(
