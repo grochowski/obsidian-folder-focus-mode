@@ -6,11 +6,28 @@
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-		"version": "node version-bump.mjs && git add versions.json",
-		"publish": "commit-and-tag-version"
+		"version": "commit-and-tag-version"
 	},
 	"commit-and-tag-version": {
-		"t": ""
+		"t": "",
+		"bumpFiles": [
+			{
+				"filename": "versions.json",
+				"updater": "version-bump.js"
+			},
+			{
+				"filename": "package.json",
+				"type": "json"
+			},
+			{
+				"filename": "package-lock.json",
+				"type": "json"
+			},
+			{
+				"filename": "manifest.json",
+				"type": "json"
+			}
+		]
 	},
 	"keywords": [],
 	"author": "",
