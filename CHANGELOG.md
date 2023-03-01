@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.9.12](https://github.com/grochowski/obsidian-folder-focus-mode/compare/0.9.11...0.9.12) (2023-03-01)
+
+
+### Bug Fixes
+
+* expand/collapse compatibility (experimental!), explorer buttons ([c2457b7](https://github.com/grochowski/obsidian-folder-focus-mode/commit/c2457b79ac8000f3f695b89105b3c05a07da3c53))
+
 ### [0.9.11](https://github.com/grochowski/obsidian-folder-focus-mode/compare/0.9.10...0.9.11) (2022-11-24)
 
 
