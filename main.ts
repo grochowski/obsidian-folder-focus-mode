@@ -292,11 +292,15 @@ export default class FolderFocusModePlugin extends Plugin {
 	*/
   substituteSetterForElement(el: any, allowCollapse: boolean = true) {
     el.toggleCollapse = function () {
-        if (!allowCollapse) {
-            el.collapsed = true;  // Force collapse
-        } else {
-            el.collapsed = !el.collapsed;
-        }
+      document.dispatchEvent(new Event(
+			  'collapse-changed'
+			));
+
+      if (!allowCollapse) {
+        el.collapsed = true;  // Force collapse
+      } else {
+        el.collapsed = !el.collapsed;
+      }
     };
   }
 
