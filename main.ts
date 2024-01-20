@@ -290,25 +290,15 @@ export default class FolderFocusModePlugin extends Plugin {
 	/*
 	Hack around expand/collapse all - WIP
 	*/
-	substituteSetterForElement(el: any, allowCollapse: boolean = true) {
-
-		el.__defineSetter__('collapsed', function(newValue: any){
-			document.dispatchEvent(new Event(
-				'collapse-changed'
-			));
-
-			if(!allowCollapse) {
-				this._collapsed = true;
-			} else {
-				this._collapsed = newValue;
-			}
-		});
-
-		el.__defineGetter__('collapsed', function() {
-			return this._collapsed;
-		});
-		
-	}
+  substituteSetterForElement(el: any, allowCollapse: boolean = true) {
+    el.toggleCollapse = function () {
+        if (!allowCollapse) {
+            el.collapsed = true;  // Force collapse
+        } else {
+            el.collapsed = !el.collapsed;
+        }
+    };
+  }
 
 	/**
 	 * Initialises plugin
