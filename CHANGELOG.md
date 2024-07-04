@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [0.9.13](https://github.com/grochowski/obsidian-folder-focus-mode/compare/0.9.12...0.9.13) (2024-07-04)
+
 ### [0.9.12](https://github.com/grochowski/obsidian-folder-focus-mode/compare/0.9.11...0.9.12) (2023-03-01)
 
 

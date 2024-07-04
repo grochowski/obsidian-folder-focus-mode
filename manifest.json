@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-folder-focus-mode",
 	"name": "Folder Focus Mode",
-	"version": "0.9.12",
+	"version": "0.9.13",
 	"minAppVersion": "0.12.0",
 	"description": "Focus file explorer on chosen folder and its files and subdirectories, while hiding all the other elements.",
 	"author": "Grochowski",
