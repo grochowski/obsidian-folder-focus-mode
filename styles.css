@@ -32,3 +32,9 @@
 	pointer-events: none;
 	display: none;
 }
+
+.folder-focus-mode.folder-focus-mode-simplified .tree-item-children:has(.folderfocus-up-element) {
+	margin-inline-start: 0px;
+	padding-inline-start: 0px;
+	border-inline-start: none;
+}
