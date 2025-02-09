@@ -1,5 +1,6 @@
 import FolderFocusModePlugin from "main";
 import { App, PluginSettingTab, Setting } from "obsidian";
+import STRINGS from 'Strings';
 export class FolderFocusModeSettingTab extends PluginSettingTab {
 
 	plugin: FolderFocusModePlugin;
@@ -13,8 +14,8 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 		new Setting(containerEl)
-			.setName("Auto-Focus when hidden")
-			.setDesc("Ensures the plugin focuses automatically on directory of newly opened files, if they are not visible right now")
+			.setName(STRINGS.settings.autoFocusWhenHidden.name)
+			.setDesc(STRINGS.settings.autoFocusWhenHidden.desc)
 			.addToggle((component) =>
 				component
 					.setValue(this.plugin.settings.autofocusMode)
@@ -25,8 +26,8 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName("Auto-Focus on root")
-			.setDesc("Focus on the first folder from root if the auto focus setting is enabled")
+			.setName(STRINGS.settings.autoFocusOnRoot.name)
+			.setDesc(STRINGS.settings.autoFocusOnRoot.desc)
 			.addToggle((component) =>
 				component
 					.setValue(this.plugin.settings.autofocusRoot)
@@ -37,8 +38,8 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName("Force auto-focus on parent directory")
-			.setDesc("Always auto-focus on the parent directory of current file, even if it is already visible")
+			.setName(STRINGS.settings.forceAutoFocus.name)
+			.setDesc(STRINGS.settings.forceAutoFocus.desc)
 			.addToggle((component) =>
 				component
 					.setValue(this.plugin.settings.autofocusForced)
@@ -49,8 +50,8 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName("Simplified view")
-			.setDesc("Hide parent directories when focusing on a folder (saves space when using nested folders)")
+			.setName(STRINGS.settings.simplifiedView.name)
+			.setDesc(STRINGS.settings.simplifiedView.desc)
 			.addToggle((component) =>
 				component
 					.setValue(this.plugin.settings.simplifiedView)
@@ -62,8 +63,8 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName("Button on explorer")
-			.setDesc("Add a button on the top of the file explorer")
+			.setName(STRINGS.settings.buttonOnExplorer.name)
+			.setDesc(STRINGS.settings.buttonOnExplorer.desc) 
 			.addToggle((component)=>
 				component
 					.setValue(this.plugin.settings.focusButton)
@@ -75,8 +76,8 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName("Show focus option on file context menu")
-			.setDesc("Show \"Focus on this file\" option in file context menu")
+			.setName(STRINGS.settings.showFocusOption.name)
+			.setDesc(STRINGS.settings.showFocusOption.desc)
 			.addToggle((component)=>
 				component
 					.setValue(this.plugin.settings.fileContextMenu)
@@ -87,8 +88,8 @@ export class FolderFocusModeSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName('Folder Note: External files')
-			.setDesc('Focus on the folder linked with the folder note')
+			.setName(STRINGS.settings.folderNote.name)
+			.setDesc(STRINGS.settings.folderNote.desc)
 			.addToggle((component)=>
 				component
 					.setValue(this.plugin.settings.focusNote)

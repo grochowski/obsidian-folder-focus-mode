@@ -5,6 +5,7 @@ import {
 } from 'obsidian';
 import { FolderFocusModeSettingTab } from 'settings';
 import { ExplorerLeaf } from './@types/obsidian';
+import STRINGS from 'Strings';
 import { getRelativePath, isAbsolutePath, getDirname, getRootDirname } from './util';
 
 interface FolderFocusModePluginSettings {
@@ -269,7 +270,7 @@ export default class FolderFocusModePlugin extends Plugin {
 			const isCurrentlyFocused = this.focusModePath === file.path;
 			menu.addItem((item: any) => {
 				item
-					.setTitle(isCurrentlyFocused ? "Unfocus" : "Focus on this folder")
+					.setTitle(isCurrentlyFocused ? STRINGS.app.unfocus : STRINGS.app.focusOnFolder)
 					.setIcon("eye")
 					.onClick(async () => this.toggleFocusOption(isCurrentlyFocused, file.path));
 			});
@@ -279,7 +280,7 @@ export default class FolderFocusModePlugin extends Plugin {
 			if(this.settings.fileContextMenu) {
 				menu.addItem((item: any) => {
 					item
-						.setTitle(isCurrentlyFocused ? "Unfocus" : "Focus on this file")
+						.setTitle(isCurrentlyFocused ? STRINGS.app.unfocus : STRINGS.app.focusOnFile)
 						.setIcon("eye")
 						.onClick(async () => this.toggleFocusOption(isCurrentlyFocused, file?.parent?.path));
 				});
@@ -360,7 +361,7 @@ export default class FolderFocusModePlugin extends Plugin {
 		// initialise global command for resetting the focus mode
 		this.addCommand({
 			id: "folder-focus-mode-unfocus",
-			name: "Disable folder focus mode",
+			name: STRINGS.commands.disableFocusMode,
 			callback: () => {
 				this.showAllTreeElements();
 			},
@@ -369,7 +370,7 @@ export default class FolderFocusModePlugin extends Plugin {
 		// initialise global command for toggling the autofocus mode
 		this.addCommand({
 			id: "folder-focus-mode-toggle-autofocus",
-			name: "Toggle autofocus mode",
+			name: STRINGS.commands.toggleAutoFocus,
 			callback: () => {
 				this.settings.autofocusMode = !this.settings.autofocusMode;
 			},
@@ -378,7 +379,7 @@ export default class FolderFocusModePlugin extends Plugin {
 		// initialise global command for toggling the simplified view
 		this.addCommand({
 			id: "folder-focus-mode-toggle-simplified",
-			name: "Toggle simplified view",
+			name: STRINGS.commands.toggleSimplifiedView,
 			callback: () => {
 				this.settings.simplifiedView = !this.settings.simplifiedView;
 				this.resetClasses();
@@ -388,7 +389,7 @@ export default class FolderFocusModePlugin extends Plugin {
 		// initialise global command for enabling the focus mode for parent folder of current file
 		this.addCommand({
 			id: "folder-focus-mode-focus-active",
-			name: "Enable folder focus mode for active file",
+			name: STRINGS.commands.enableFocusModeActive,
 			checkCallback: (checking: boolean) => {
 				const currentFile = this.app.workspace.getActiveFile();
 
@@ -473,7 +474,7 @@ export default class FolderFocusModePlugin extends Plugin {
 		setIcon(icon, 'eye');
 		icon.classList.remove('focus-close');
 		icon.classList.add('focus-open');
-		icon.setAttribute('aria-label', 'Focus on this file folder');
+		icon.setAttribute('aria-label', STRINGS.app.focusOnFileFolder);
 	}
 
 	/**
@@ -487,7 +488,7 @@ export default class FolderFocusModePlugin extends Plugin {
 		setIcon(icon, 'eye-off');
 		icon.classList.remove('focus-open');
 		icon.classList.add('focus-close');
-		icon.setAttribute('aria-label', 'Unfocus folder');
+		icon.setAttribute('aria-label', STRINGS.app.unfocusFolder);
 	}
 
 	/**
